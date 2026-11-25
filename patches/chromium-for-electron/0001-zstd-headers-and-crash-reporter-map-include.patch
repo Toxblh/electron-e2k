@@ -1,0 +1,26 @@
+Electron on the e2k tree: //third_party/zstd:headers for Electron's node (the ALT tree
+uses system zstd), and the <map> include that electron's crash_allow_setting_more_options
+patch adds (its hunk does not apply to 154.0.8037.97).
+
+--- a/third_party/zstd/BUILD.gn
++++ b/third_party/zstd/BUILD.gn
+@@ -25,3 +25,9 @@
+   public_configs = [ ":system_zstd" ]
+   public_deps = [ ":zstd_headers" ]
+ }
++
++# electron (e2k/ALT system zstd): node wants :headers
++group("headers") {
++  public_configs = [ ":system_zstd" ]
++  public_deps = [ ":zstd_headers" ]
++}
+--- a/components/crash/core/app/crash_reporter_client.h
++++ b/components/crash/core/app/crash_reporter_client.h
+@@ -8,6 +8,7 @@
+ #include <stdint.h>
+ 
+ #include <cstdint>
++#include <map>
+ #include <string>
+ #include <string_view>
+ #include <type_traits>

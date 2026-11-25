@@ -1,0 +1,33 @@
+From 6d5e04868287f756e71f0ab63e1e52799412ea5d Mon Sep 17 00:00:00 2001
+From: Anton Palgunov <toxblh@gmail.com>
+Date: Wed, 25 Nov 2026 11:38:09 +0400
+Subject: [PATCH 1/3] build: no tracing resources (the Chromium tarball has no
+ catapult tracing UI)
+
+---
+ build/electron_paks.gni | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/build/electron_paks.gni b/build/electron_paks.gni
+index c5ab20e..a183846 100644
+--- a/build/electron_paks.gni
++++ b/build/electron_paks.gni
+@@ -77,7 +77,6 @@ template("electron_extra_paks") {
+       "$root_gen_dir/chrome/common_resources.pak",
+       "$root_gen_dir/components/components_resources.pak",
+       "$root_gen_dir/content/browser/resources/media/media_internals_resources.pak",
+-      "$root_gen_dir/content/browser/tracing/tracing_resources.pak",
+       "$root_gen_dir/content/browser/webrtc/resources/webrtc_internals_resources.pak",
+       "$root_gen_dir/content/content_resources.pak",
+       "$root_gen_dir/content/gpu_resources.pak",
+@@ -98,7 +97,6 @@ template("electron_extra_paks") {
+       "//content/browser/resources/gpu:resources",
+       "//content/browser/resources/media:resources",
+       "//content/browser/resources/process:resources",
+-      "//content/browser/tracing:resources",
+       "//content/browser/webrtc/resources",
+       "//electron:resources",
+       "//mojo/public/js:resources",
+-- 
+2.50.1
+

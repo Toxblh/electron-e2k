@@ -1,0 +1,22 @@
+Keep Chromium's libc++ ABI version 2 (apply after electron/patches/chromium).
+
+Electron's build_make_libcxx_abi_unstable_false_for_electron.patch switches the
+bundled libc++ to ABI version 1. That changes every bindgen output (the Rust
+allocator FFI first), so no Rust crate matches the native e2k rustc seed and
+rustc would have to run under qemu-e2k. e2k keeps ABI 2.
+
+--- a/buildtools/third_party/libc++/__config_site
++++ b/buildtools/third_party/libc++/__config_site
+@@ -18,11 +18,7 @@
+ //    _LIBCPP_ABI_NAMESPACE to a shorter value.
+ #define _LIBCPP_ABI_NAMESPACE __Cr
+ 
+-#define _LIBCPP_ABI_VERSION 1
+-#define _LIBCPP_ABI_USE_WRAP_ITER_IN_STD_ARRAY
+-#define _LIBCPP_ABI_USE_WRAP_ITER_IN_STD_STRING_VIEW
+-#define _LIBCPP_ABI_TRIVIALLY_COPYABLE_BIT_ITERATOR
+-#define _LIBCPP_ABI_BITSET_VECTOR_BOOL_CONST_SUBSCRIPT_RETURN_BOOL
++#define _LIBCPP_ABI_VERSION 2
+ 
+ #define _LIBCPP_ABI_FORCE_ITANIUM 0
+ #define _LIBCPP_ABI_FORCE_MICROSOFT 0

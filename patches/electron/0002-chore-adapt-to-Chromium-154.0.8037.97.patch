@@ -1,0 +1,59 @@
+From c8b24eae2421e83e7a8f01f2c13dcdf38bd52ced Mon Sep 17 00:00:00 2001
+From: Anton Palgunov <toxblh@gmail.com>
+Date: Wed, 25 Nov 2026 11:38:09 +0400
+Subject: [PATCH 2/3] chore: adapt to Chromium 154.0.8037.97
+
+BrowserProcess has no speech_recognition_small_expert_model_installer() in
+154.0.8037.97, and crash_reporter::ProductInfo got a constructor and accessors.
+---
+ shell/app/electron_crash_reporter_client.cc | 4 ++--
+ shell/browser/browser_process_impl.cc       | 4 ----
+ shell/browser/browser_process_impl.h        | 2 --
+ 3 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/shell/app/electron_crash_reporter_client.cc b/shell/app/electron_crash_reporter_client.cc
+index ac1e54b..08b796f 100644
+--- a/shell/app/electron_crash_reporter_client.cc
++++ b/shell/app/electron_crash_reporter_client.cc
+@@ -179,8 +179,8 @@ std::string ElectronCrashReporterClient::GetUploadUrl() {
+ }
+ 
+ void ElectronCrashReporterClient::GetProductInfo(ProductInfo* product_info) {
+-  product_info->product_name = ELECTRON_PRODUCT_NAME;
+-  product_info->version = ELECTRON_VERSION_STRING;
++  // e2k tree (154.0.8037.97): ProductInfo has a constructor and accessors instead of public fields
++  *product_info = ProductInfo(ELECTRON_PRODUCT_NAME, ELECTRON_VERSION_STRING, "");
+ }
+ 
+ bool ElectronCrashReporterClient::EnableBreakpadForProcess(
+diff --git a/shell/browser/browser_process_impl.cc b/shell/browser/browser_process_impl.cc
+index 77c3426..33076fb 100644
+--- a/shell/browser/browser_process_impl.cc
++++ b/shell/browser/browser_process_impl.cc
+@@ -383,10 +383,6 @@ UsbSystemTrayIcon* BrowserProcessImpl::usb_system_tray_icon() {
+ void BrowserProcessImpl::set_usb_system_tray_icon_for_test(
+     std::unique_ptr<UsbSystemTrayIcon> icon) {}
+ 
+-speech::SpeechRecognitionSmallExpertModelInstaller*
+-BrowserProcessImpl::speech_recognition_small_expert_model_installer() {
+-  return nullptr;
+-}
+ 
+ os_crypt_async::OSCryptAsync* BrowserProcessImpl::os_crypt_async() {
+   return os_crypt_async_.get();
+diff --git a/shell/browser/browser_process_impl.h b/shell/browser/browser_process_impl.h
+index 15c78d0..409162f 100644
+--- a/shell/browser/browser_process_impl.h
++++ b/shell/browser/browser_process_impl.h
+@@ -129,8 +129,6 @@ class BrowserProcessImpl : public BrowserProcess {
+   UsbSystemTrayIcon* usb_system_tray_icon() override;
+   void set_usb_system_tray_icon_for_test(
+       std::unique_ptr<UsbSystemTrayIcon> icon) override;
+-  speech::SpeechRecognitionSmallExpertModelInstaller*
+-  speech_recognition_small_expert_model_installer() override;
+   os_crypt_async::OSCryptAsync* os_crypt_async() override;
+   void set_additional_os_crypt_async_provider_for_test(
+       size_t precedence,
+-- 
+2.50.1
+
