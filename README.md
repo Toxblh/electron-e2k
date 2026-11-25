@@ -78,7 +78,7 @@ lcc 1.29.16), плагины проходов e2k-rmw-fence и e2k-i65-fix, ко
   vsda, os-proxy-resolver, copilot и deviceid есть только в x86-сборках (не грузятся).
   lcc 1.29.16 не порождает шаблон функции, названный только в аргументе шаблона по умолчанию
   (node-addon-api `AttachData<..., default_finalizer<T>>`) — неопределённый символ при загрузке модуля;
-  обход — упомянуть шаблон в теле функции в napi-inl.h (`apps/vscode/natbuild3.sh`, `natbuild4.sh`).
+  обход — упомянуть шаблон в теле функции в napi-inl.h (`apps/vscode/natbuild3.sh`, `natbuild4.sh`). native-keymap использует API V8 напрямую: `-DV8_CPPGC_MICROTASK_QUEUE`.
 
 ## Ограничения и что дальше
 - Модули .node из x86-приложений нужно пересобирать для e2k.
